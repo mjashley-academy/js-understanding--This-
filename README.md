@@ -5,13 +5,14 @@ When a function is created, a keyword called `this` is created (behind the scene
 The `this` keyword’s value has nothing to do with the function itself, how the function is called determines this's value
 
 ## Default "this" context
-// define a function
+```// define a function
 var myFunction = function () {
   console.log(this);
 };
 
 // call it
 myFunction();
+```
 
 What can we expect the `this` value to be? By default, `this` should always be the window Object, which refers to the root—the global scope, except if the script is running in strict mode (`"use strict"`) `this` will be undefined.
 
