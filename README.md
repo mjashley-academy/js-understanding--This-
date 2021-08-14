@@ -32,6 +32,7 @@ What would be the `this` context here?...
 Well, the answer is We do not know.
 
 Remember
+
 The this keyword’s value has nothing to do with the function itself, how the function is called determines the `this` value
 
 Okay, let's change the code a bit...
