@@ -13,7 +13,7 @@ var myFunction = function () {
 // call it
 myFunction();
 
-What can we expect the `this` value to be? By default, `this` should always be the window Object, which refers to the root—the global scope, except if the script is running in strict mode ("use strict") this will be undefined.
+What can we expect the `this` value to be? By default, `this` should always be the window Object, which refers to the root—the global scope, except if the script is running in strict mode (`"use strict"`) `this` will be undefined.
 
 ## Object literals
 var myObject = {
