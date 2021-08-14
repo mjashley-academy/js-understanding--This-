@@ -25,9 +25,9 @@ What can we expect the `this` value to be? By default, `this` should always be t
 ```
 What would be the `this` context here?...
 
-*this === myObject?
-*this === window?
-*this === anything else?
+* this === myObject?
+* this === window?
+* this === anything else?
 Well, the answer is We do not know.
 
 Remember
