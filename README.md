@@ -28,6 +28,7 @@ What would be the `this` context here?...
 * this === myObject?
 * this === window?
 * this === anything else?
+
 Well, the answer is We do not know.
 
 Remember
