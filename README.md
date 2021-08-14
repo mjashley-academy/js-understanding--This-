@@ -1,8 +1,8 @@
 # Understanding "this" in javascript with regular functions
 ## Conceptual Overview of "this"
-When a function is created, a keyword called <span style="color:red">some **This is Red Bold.** text</span> ` this ` is created (behind the scenes), which links to the object in which the function operates.
+When a function is created, a keyword called ` this ` is created (behind the scenes), which links to the object in which the function operates.
 
-The `this` keyword’s value has nothing to do with the function itself, how the function is called determines this's value
+**The `this` keyword’s value has nothing to do with the function itself, how the function is called determines this's value **
 
 ## Default "this" context
 ```javascript
