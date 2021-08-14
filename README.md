@@ -38,7 +38,7 @@ Remember
 The this keyword’s value has nothing to do with the function itself, how the function is called determines the `this` value
 
 Okay, let's change the code a bit...
-
+```javascript
 var myMethod = function () {
   console.log(this);
 };
@@ -46,13 +46,15 @@ var myMethod = function () {
 var myObject = {
   myMethod: myMethod
 };
+```
 Is it clearer now?
 Of course, everything depends on how we call the function.
 
 myObject in the code is given a property called myMethod, which points to the myMethod function. When the myMethod function is called from the global scope, this refers to the window object. When it is called as a method of myObject, this refers to myObject.
-
+```javascript
 myObject.myMethod() // this === myObject
 myMethod() // this === window
+```
 This is called implicit binding
 
 ## Explicit binding
@@ -101,10 +103,11 @@ obj2.myMethod.call( obj1 ); // 2
 ```
 ## Hard binding
 This is done with bind() (ES5). bind() returns a new function that is hard-coded to call the original function with the this context set as you specified.
-
+```javascript
 myMethod = myMethod.bind(myObject);
 
 myMethod(); // this === myObject
+```
 Hard binding takes precedence over explicit binding.
 ```javascript
 var myMethod = function () { 
@@ -217,11 +220,12 @@ Arrow functions do not bind their own this, instead, they inherit the one from t
 
 If we look at the first example but using arrow functions
 
+```javascript
 // define a function
 const myFunction = () => {
   console.log(this);
 };
-
+```
 // call it
 myFunction();
 What can we expect this to be?.... exactly, same as with normal functions, window or global object. Same result but not the same reason. With normal functions the scoped is bound to the global one by default, arrows functions, as I said before, do not have their own this but they inherit it from the parent scope, in this case the global one.
@@ -239,11 +243,12 @@ const myObject = {
 What about now?
 
 In this case, one could say, that it really depends on how the method is called, same as normal functions, but that's not the case here, let's see...
-
+```javascript
 myObject.myMethod() // this === window or global object
 
 const myMethod = myObject.myMethod;
 myMethod() // this === window or global object
+```
 Weird right? Well, remember, arrow functions don't bind their own scope, but inherit it from the parent one, which in this case is window or the global object.
 
 Let's change the example a little bit
@@ -256,14 +261,15 @@ const myObject = {
 };
 ```
 We need to call myObject.myMethod() to initialize myObject.myArrowFunction and then let's see what the output would be
-
+```javascript
 myObject.myMethod() // this === myObject
 
 myObject.myArrowFunction() // this === myObject
-
+`
 const myArrowFunction = myObject.myArrowFunction;
 myArrowFunction() // this === myObject
-Clearer now? When we call myObject.myMethod(), we initialize myObject.myArrowFunction with an arrow function which is inside of the method myMethod, so it will inherit its scope. We can clearly see a perfect use case, closures.
+```
+Clearer now? When we call `myObject.myMethod()`, we initialize myObject.myArrowFunction with an arrow function which is inside of the method myMethod, so it will inherit its scope. We can clearly see a perfect use case, closures.
 
 ## Explicit, Hard and New binding
 What would happen when we try to bind a scope with any of these techniques?
@@ -273,15 +279,20 @@ let's see...
 const myMethod = () => {
   console.log(this);
 };
-```
+
 const myObject = {};
+```
 ## Explicity binding
+```javascript
 myMethod.call(myObject, args1, args2, ...) // this === window or global object
 myMethod.apply(myObject, [array of args]) // this === window or global object
-Hard binding
+```
+## Hard binding
+```javascript
 const myMethodBound = myMethod.bind(myObject);
 
 myMethodBound(); // this === window or global object
+```
 ## New binding
 new myMethod(); // Uncaught TypeError: myMethod is not a constructor
 As you see, it does not matter how we try to bind the scope, it will never work. Also, arrows functions are not constructors so you can not use new with them.
