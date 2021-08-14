@@ -1,4 +1,4 @@
-# js-understanding--This-
+# Understanding "this" in javascript with regular functions
 ## Conceptual Overview of "this"
 When a function is created, a keyword called this is created (behind the scenes), which links to the object in which the function operates.
 
@@ -182,3 +182,121 @@ myObject = {
   }
 };
 I do not recommend this approach because it can cause memory leaks and it tends to make you forget about the real scope and rely on variables. You can get to the point where your scope is a real mess.
+
+# Understanding "this" in javascript with arrow functions
+
+We will go through the same examples, but we will use arrow functions instead to compare the outputs.
+
+The motivation of this second post about the scope is, despite arrow functions are a powerful addition to ES6, they must not be misused or abused.
+
+## Default "this" context
+Arrow functions do not bind their own this, instead, they inherit the one from the parent scope, which is called "lexical scoping". This makes arrow functions to be a great choice in some scenarios but a very bad one in others
+
+If we look at the first example but using arrow functions
+
+// define a function
+const myFunction = () => {
+  console.log(this);
+};
+
+// call it
+myFunction();
+What can we expect this to be?.... exactly, same as with normal functions, window or global object. Same result but not the same reason. With normal functions the scoped is bound to the global one by default, arrows functions, as I said before, do not have their own this but they inherit it from the parent scope, in this case the global one.
+
+What would happen if we add "use strict"? Nothing, it will be the same result, since the scope comes from the parent one.
+
+## Arrow functions as methods
+const myObject = {
+  myMethod: () => {
+    console.log(this);
+  }
+};
+What about now?
+
+In this case, one could say, that it really depends on how the method is called, same as normal functions, but that's not the case here, let's see...
+
+myObject.myMethod() // this === window or global object
+
+const myMethod = myObject.myMethod;
+myMethod() // this === window or global object
+Weird right? Well, remember, arrow functions don't bind their own scope, but inherit it from the parent one, which in this case is window or the global object.
+
+Let's change the example a little bit
+
+const myObject = {
+  myArrowFunction: null,
+  myMethod: function () {
+    this.myArrowFunction = () => { console.log(this) };
+  }
+};
+We need to call myObject.myMethod() to initialize myObject.myArrowFunction and then let's see what the output would be
+
+myObject.myMethod() // this === myObject
+
+myObject.myArrowFunction() // this === myObject
+
+const myArrowFunction = myObject.myArrowFunction;
+myArrowFunction() // this === myObject
+Clearer now? When we call myObject.myMethod(), we initialize myObject.myArrowFunction with an arrow function which is inside of the method myMethod, so it will inherit its scope. We can clearly see a perfect use case, closures.
+
+## Explicit, Hard and New binding
+What would happen when we try to bind a scope with any of these techniques?
+
+let's see...
+
+const myMethod = () => {
+  console.log(this);
+};
+
+const myObject = {};
+## Explicity binding
+myMethod.call(myObject, args1, args2, ...) // this === window or global object
+myMethod.apply(myObject, [array of args]) // this === window or global object
+Hard binding
+const myMethodBound = myMethod.bind(myObject);
+
+myMethodBound(); // this === window or global object
+## New binding
+new myMethod(); // Uncaught TypeError: myMethod is not a constructor
+As you see, it does not matter how we try to bind the scope, it will never work. Also, arrows functions are not constructors so you can not use new with them.
+
+## API calls
+This part is interesting. Arrow functions are a good choice for API calls ( asynchronous code ), only if we use CLOSURES, let's look at this...
+
+myObject = {
+  myMethod: function () {
+    helperObject.doSomethingAsync('superCool', () => {
+      console.log(this); // this === myObject
+    });
+  },
+};
+This is the perfect example, we ask to do something async, we wait for the answer to do some actions and we don't have to worry about the scope we were working with.
+
+But what would happen if for any reason we refactor the code and extract that function out in order to be reused, for example?
+
+let's see...
+
+const reusabledCallback = () => {
+  console.log(this); // this === window or global object
+};
+
+myObject = {
+  myMethod: function () {
+    helperObject.doSomethingAsync('superCool', reusabledCallback);
+  },
+};
+If we do so, we would be breaking the current working code, and, remember, it doesn't matter how we try to bind the scope, it won't work. So if you decide to do so, you have to use normal functions and bind the scope manually. For example
+
+const reusabledCallback = function () {
+  console.log(this);
+};
+
+myObject = {
+  myMethod: function () {
+    helperObject.doSomethingAsync('superCool', reusabledCallback.bind(myObject));
+  },
+};
+## Conclusions
+Arrow functions are a powerful addition to ES6, but we have to be careful and wise when and how to use them. I continuously find places, where arrow functions are not usable, and this can cause difficult to track errors, especially if we do not understand how they really work.
+
+In my opinion, arrow functions are the best choice when working with closures or callbacks, but not a good choice when working with class/object methods or constructors.
