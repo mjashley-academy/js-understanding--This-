@@ -102,7 +102,7 @@ obj1.myMethod.call( obj2 ); // 3
 obj2.myMethod.call( obj1 ); // 2
 ```
 ## Hard binding
-This is done with bind() (ES5). bind() returns a new function that is hard-coded to call the original function with the this context set as you specified.
+This is done with `bind()` (ES5). `bind()` returns a new function that is hard-coded to call the original function with the this context set as you specified.
 ```javascript
 myMethod = myMethod.bind(myObject);
 
@@ -167,7 +167,7 @@ myObject = {
     }
 };
 ```
-Take a look at the code. You might think that because we are passing this.onSomethingCoolDone as a callback, the scope is myObject a reference to that method and not to the way to call it.
+Take a look at the code. You might think that because we are passing `this.onSomethingCoolDone` as a callback, the scope is myObject a reference to that method and not to the way to call it.
 
 To fix this, there are a few ways:
 
@@ -230,7 +230,7 @@ const myFunction = () => {
 myFunction();
 What can we expect this to be?.... exactly, same as with normal functions, window or global object. Same result but not the same reason. With normal functions the scoped is bound to the global one by default, arrows functions, as I said before, do not have their own this but they inherit it from the parent scope, in this case the global one.
 
-What would happen if we add "use strict"? Nothing, it will be the same result, since the scope comes from the parent one.
+What would happen if we add `"use strict"`? Nothing, it will be the same result, since the scope comes from the parent one.
 
 ## Arrow functions as methods
 ```javascript
