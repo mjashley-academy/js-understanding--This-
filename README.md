@@ -18,7 +18,8 @@ myFunction();
 What can we expect the `this` value to be? By default, `this` should always be the window Object, which refers to the root—the global scope, except if the script is running in strict mode (`"use strict"`) `this` will be undefined.
 
 ## Object literals
-```var myObject = {
+```javascript
+var myObject = {
   myMethod: function () {
     console.log(this);
   }
@@ -56,7 +57,7 @@ This is called implicit binding
 
 ## Explicit binding
 Explicit binding is when we explicitly bind a context to the function. This is done with call() or apply()
-
+```javascript
 var myMethod = function () {
   console.log(this);
 };
@@ -89,6 +90,7 @@ obj2.myMethod(); // 3
 
 obj1.myMethod.call( obj2 ); // ?????
 obj2.myMethod.call( obj1 ); // ?????
+```
 Explicit binding takes precedence over implicit binding, which means you should ask first if explicit binding applies before checking for implicit binding.
 
 obj1.myMethod.call( obj2 ); // 3
